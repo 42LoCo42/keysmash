@@ -1,0 +1,2 @@
+option('keyd', type: 'string')
+option('sound_dir', type: 'string')

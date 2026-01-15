@@ -1,0 +1,16 @@
+* keysmash
+Adds some satisfying keyboard noises when you type stuff,
+so you can brag to your friends about that fancy new mechanical keyboard you got.
+
+** Run
+#+begin_src shell
+  nix shell github:42loco42/keysmash
+  sudo keysmash
+#+end_src
+
+Note that keysmash has to be specifically run with =sudo=
+so that it can attach to the user's pulseaudio/pipewire-pulse stack!
+
+** References
+- Idea & sounds: [[https://github.com/skkeeper/linux-clicky][linux-clicky]]
+- Event monitoring loop: [[https://github.com/rvaiya/keyd][keyd]]
