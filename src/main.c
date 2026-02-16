@@ -21,15 +21,24 @@ static int keyd_event_handler(struct event* ev) {
 	return 0;
 }
 
-int main(void) {
+static void relaunch(const char* self) {
+	printf("relaunching %s with sudo...\n", self);
+	execlp("sudo", "sudo", self, NULL);
+}
+
+int main(int argc, char** argv) {
+	(void) argc;
+	const char* self = argv[0];
+
 	char* sudo_uid  = getenv("SUDO_UID");
 	char* sudo_gid  = getenv("SUDO_GID");
 	char* sudo_home = getenv("SUDO_HOME");
 
-	if(sudo_uid == NULL) errx(1, "SUDO_UID must be set!");
-	if(sudo_gid == NULL) errx(1, "SUDO_GID must be set!");
-	if(sudo_home == NULL) errx(1, "SUDO_HOME must be set!");
-	if(getuid() != 0) errx(1, "must be run with sudo as root!");
+	if(sudo_uid == NULL ||  //
+	   sudo_gid == NULL ||  //
+	   sudo_home == NULL || //
+	   getuid() != 0)
+		relaunch(self);
 
 	if(pthread_barrier_init(&barrier, NULL, 2) < 0) die("pthread_barrier_init");
 

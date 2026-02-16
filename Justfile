@@ -1,5 +1,5 @@
 run: build
-	sudo ./build/keysmash
+	./build/keysmash
 
 build:
 	if [ ! -d build ]; then just _wipe; fi
