@@ -3,6 +3,7 @@
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = import nixpkgs { inherit system; };
+        inherit (pkgs.lib) head match pipe readFile;
         inherit (pkgs.lib.fileset) toSource unions;
         stdenv = pkgs.gccStdenv;
 
@@ -16,7 +17,12 @@
       rec {
         packages.default = stdenv.mkDerivation (drv: {
           pname = "keysmash";
-          version = "1.0.0";
+
+          version = pipe ./meson.build [
+            readFile
+            (match ".*version: '([^']+)'.*")
+            head
+          ];
 
           src = toSource {
             root = ./.;

@@ -1,7 +1,7 @@
 project(
 	'keysmash',
 	'c',
-	version: '1.0.0',
+	version: '1.1.0',
 	default_options: {
 		'buildtype': 'debugoptimized',  #
 		'warning_level': '3',
