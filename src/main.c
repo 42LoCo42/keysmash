@@ -17,6 +17,10 @@ static int keyd_event_handler(struct event* ev) {
 	if(ev->devev->type != DEV_KEY) return 0;
 	if(!ev->devev->pressed) return 0;
 
+	const char* name = keycode_table[ev->devev->code].name;
+	if(strstr(name, "mouse") != NULL) return 0;
+	puts(name);
+
 	pthread_barrier_wait(&barrier);
 	return 0;
 }
