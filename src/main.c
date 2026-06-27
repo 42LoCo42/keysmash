@@ -12,6 +12,9 @@
 
 static pthread_barrier_t barrier = {0};
 
+static uint8_t oldKey = 0;
+static uint8_t newKey = 0;
+
 static int keyd_event_handler(struct event* ev) {
 	if(ev->type != EV_DEV_EVENT) return 0;
 	if(ev->devev->type != DEV_KEY) return 0;
@@ -21,7 +24,9 @@ static int keyd_event_handler(struct event* ev) {
 	if(strstr(name, "mouse") != NULL) return 0;
 	puts(name);
 
+	newKey = ev->devev->code;
 	pthread_barrier_wait(&barrier);
+
 	return 0;
 }
 
@@ -82,6 +87,13 @@ int main(int argc, char** argv) {
 
 	for(;;) {
 		pthread_barrier_wait(&barrier);
-		PlaySound(sounds[GetRandomValue(0, sound_paths.count - 1)]);
+
+		static size_t index = 0;
+		if(oldKey != newKey) {
+			oldKey = newKey;
+			index  = GetRandomValue(0, sound_paths.count - 1);
+		}
+
+		PlaySound(sounds[index]);
 	}
 }
